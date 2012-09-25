@@ -78,6 +78,6 @@ define apt::source(
 
   # Need anchor to provide containment for dependencies.
   anchor { "apt::source::${name}":
-    require => Class['apt::update'],
+    notify => Class['apt::update'],
   }
 }
