@@ -87,12 +87,14 @@ class apt(
         ensure  => present,
         content => "APT::Get::AllowUnauthenticated 1;\n",
         path    => "${apt_conf_d}/99unauth",
+        notify  => Exec['apt_update'],
       }
     }
     false: {
       file { '99unauth':
         ensure => absent,
         path   => "${apt_conf_d}/99unauth",
+        notify  => Exec['apt_update'],
       }
     }
     undef:   { } # do nothing
@@ -107,8 +109,8 @@ class apt(
     }
   }
 
-  # Need anchor to provide containment for dependencies.
-  anchor { 'apt::update':
-    require => Class['apt::update'],
-  }
+  anchor { 'apt::begin': } ->
+    Class['apt::params']   ->
+    Exec['apt_update']     ->
+  anchor { 'apt::end': }
 }

@@ -51,6 +51,7 @@ define apt::key (
           unless    => "/usr/bin/apt-key list | /bin/grep '${upkey}'",
           logoutput => 'on_failure',
           before    => Anchor["apt::key ${upkey} present"],
+          notify    => Exec['apt_update'],
         }
       }
 

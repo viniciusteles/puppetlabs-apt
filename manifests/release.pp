@@ -13,5 +13,6 @@ class apt::release (
     group   => root,
     mode    => '0644',
     content => "APT::Default-Release \"${release_id}\";"
+    notify  => Exec['apt_update'],
   }
 }

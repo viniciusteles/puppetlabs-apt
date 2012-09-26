@@ -52,6 +52,7 @@ define apt::source(
       priority => $pin,
       before   => File["${name}.list"],
       origin   => $host,
+      notify   => Exec['apt_update'],
     }
   }
 
@@ -61,6 +62,7 @@ define apt::source(
       logoutput   => 'on_failure',
       refreshonly => true,
       subscribe   => File["${name}.list"],
+      notify   => Exec['apt_update'],
     }
   }
 
