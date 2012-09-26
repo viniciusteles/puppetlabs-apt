@@ -30,6 +30,8 @@ class apt(
   $purge_preferences_d  = false
 ) {
 
+  anchor { 'apt::begin': }
+
   include apt::params
   include apt::update
 
@@ -59,7 +61,8 @@ class apt(
     group   => root,
     mode    => '0644',
     content => $sources_list_content,
-    notify  => Exec['apt_update'],
+    require => Anchor['apt::begin'],
+    notify  => Class['apt::update'],
   }
 
   file { 'sources.list.d':
@@ -69,7 +72,8 @@ class apt(
     group   => root,
     purge   => $purge_sources_list_d,
     recurse => $purge_sources_list_d,
-    notify  => Exec['apt_update'],
+    require => Anchor['apt::begin'],
+    notify  => Class['apt::update'],
   }
 
   file { 'preferences.d':
@@ -79,6 +83,8 @@ class apt(
     group   => root,
     purge   => $purge_preferences_d,
     recurse => $purge_preferences_d,
+    require => Anchor['apt::begin'],
+    notify  => Class['apt::update'],
   }
 
   case $disable_keys {
@@ -87,14 +93,16 @@ class apt(
         ensure  => present,
         content => "APT::Get::AllowUnauthenticated 1;\n",
         path    => "${apt_conf_d}/99unauth",
-        notify  => Exec['apt_update'],
+        notify  => Class['apt::update'],
+        require => Anchor['apt::begin'],
       }
     }
     false: {
       file { '99unauth':
-        ensure => absent,
-        path   => "${apt_conf_d}/99unauth",
-        notify  => Exec['apt_update'],
+        ensure  => absent,
+        path    => "${apt_conf_d}/99unauth",
+        notify  => Class['apt::update'],
+        require => Anchor['apt::begin'],
       }
     }
     undef:   { } # do nothing
@@ -105,12 +113,10 @@ class apt(
     file { 'configure-apt-proxy':
       path    => "${apt_conf_d}/proxy",
       content => "Acquire::http::Proxy \"http://${proxy_host}:${proxy_port}\";",
-      notify  => Exec['apt_update'],
+      notify  => Class['apt::update'],
+      require => Anchor['apt::begin'],
     }
   }
 
-  anchor { 'apt::begin': } ->
-    Class['apt::params']   ->
-    Exec['apt_update']     ->
   anchor { 'apt::end': }
 }

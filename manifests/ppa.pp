@@ -26,20 +26,20 @@ define apt::ppa(
     creates   => "${sources_list_d}/${sources_list_d_filename}",
     logoutput => 'on_failure',
     require   => [
+      Anchor['apt::begin'],
       File[$sources_list_d],
       Package['python-software-properties'],
     ],
-    notify    => Exec['apt_update'],
+    notify    => Class['apt::update'],,
   }
 
   file { "${sources_list_d}/${sources_list_d_filename}":
     ensure  => file,
-    require => Exec["add-apt-repository-${name}"],
-  }
-
-  # Need anchor to provide containment for dependencies.
-  anchor { "apt::ppa::${name}":
-    require => Class['apt::update'],
+    require => [
+      Anchor['apt::begin'],
+      Exec["add-apt-repository-${name}"],
+    ],
+    notify    => Class['apt::update'],,
   }
 }
 

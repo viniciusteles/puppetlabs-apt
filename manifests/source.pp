@@ -38,7 +38,8 @@ define apt::source(
     group   => root,
     mode    => '0644',
     content => template("${module_name}/source.list.erb"),
-    notify  => Exec['apt_update'],
+    notify  => Class['apt::update'],
+    require => Anchor['apt::begin'],
   }
 
 
@@ -52,7 +53,8 @@ define apt::source(
       priority => $pin,
       before   => File["${name}.list"],
       origin   => $host,
-      notify   => Exec['apt_update'],
+      notify   => Class['apt::update'],
+      require  => Anchor['apt::begin'],
     }
   }
 
@@ -62,7 +64,8 @@ define apt::source(
       logoutput   => 'on_failure',
       refreshonly => true,
       subscribe   => File["${name}.list"],
-      notify   => Exec['apt_update'],
+      notify      => Class['apt::update'],
+      require     => Anchor['apt::begin'],
     }
   }
 
@@ -75,11 +78,8 @@ define apt::source(
       key_content => $key_content,
       key_source  => $key_source,
       before      => File["${name}.list"],
+      require     => Anchor['apt::begin'],
+      notify      => Class['apt::update'],
     }
-  }
-
-  # Need anchor to provide containment for dependencies.
-  anchor { "apt::source::${name}":
-    notify => Class['apt::update'],
   }
 }

@@ -5,5 +5,6 @@ class apt::update {
     command     => "${apt::params::provider} update",
     logoutput   => 'on_failure',
     refreshonly => true,
+    before      => Anchor['apt::end'],
   }
 }
