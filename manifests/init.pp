@@ -30,6 +30,11 @@ class apt(
   $purge_preferences_d  = false
 ) {
 
+  anchor { 'apt::begin':
+    before => Class['apt::params'],
+    notify => Class['apt::update'],
+  }
+
   include apt::params
   include apt::update
 
@@ -108,5 +113,9 @@ class apt(
       content => "Acquire::http::Proxy \"http://${proxy_host}:${proxy_port}\";",
       notify  => Class['apt::update'],
     }
+  }
+
+  anchor { 'apt::end': 
+    require => Class['apt::update'],
   }
 }
