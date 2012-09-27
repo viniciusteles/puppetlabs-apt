@@ -42,7 +42,7 @@ class apt(
   Apt::Source <| |> -> Exec["apt_update"]
   Exec["apt_update"] -> Package <| |>
 
-  validate_bool($purge_sources_list $purge_sources_list_d, $purge_preferences_d)
+  validate_bool($purge_sources_list, $purge_sources_list_d, $purge_preferences_d)
 
   $sources_list_content = $purge_sources_list ? {
     false => undef,
