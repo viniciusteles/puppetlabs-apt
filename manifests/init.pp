@@ -30,8 +30,6 @@ class apt(
   $purge_preferences_d  = false
 ) {
 
-  anchor { 'apt::begin': }
-
   include apt::params
   include apt::update
 
@@ -111,6 +109,4 @@ class apt(
       notify  => Class['apt::update'],
     }
   }
-
-  anchor { 'apt::end': }
 }
