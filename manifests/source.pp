@@ -39,7 +39,6 @@ define apt::source(
     mode    => '0644',
     content => template("${module_name}/source.list.erb"),
     notify  => Class['apt::update'],
-    require => Anchor['apt::begin'],
   }
 
 
@@ -54,7 +53,6 @@ define apt::source(
       before   => File["${name}.list"],
       origin   => $host,
       notify   => Class['apt::update'],
-      require  => Anchor['apt::begin'],
     }
   }
 
@@ -65,7 +63,6 @@ define apt::source(
       refreshonly => true,
       subscribe   => File["${name}.list"],
       notify      => Class['apt::update'],
-      require     => Anchor['apt::begin'],
     }
   }
 
@@ -78,7 +75,6 @@ define apt::source(
       key_content => $key_content,
       key_source  => $key_source,
       before      => File["${name}.list"],
-      require     => Anchor['apt::begin'],
       notify      => Class['apt::update'],
     }
   }

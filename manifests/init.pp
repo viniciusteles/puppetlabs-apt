@@ -61,7 +61,6 @@ class apt(
     group   => root,
     mode    => '0644',
     content => $sources_list_content,
-    require => Anchor['apt::begin'],
     notify  => Class['apt::update'],
   }
 
@@ -72,7 +71,6 @@ class apt(
     group   => root,
     purge   => $purge_sources_list_d,
     recurse => $purge_sources_list_d,
-    require => Anchor['apt::begin'],
     notify  => Class['apt::update'],
   }
 
@@ -83,7 +81,6 @@ class apt(
     group   => root,
     purge   => $purge_preferences_d,
     recurse => $purge_preferences_d,
-    require => Anchor['apt::begin'],
     notify  => Class['apt::update'],
   }
 
@@ -94,7 +91,6 @@ class apt(
         content => "APT::Get::AllowUnauthenticated 1;\n",
         path    => "${apt_conf_d}/99unauth",
         notify  => Class['apt::update'],
-        require => Anchor['apt::begin'],
       }
     }
     false: {
@@ -102,7 +98,6 @@ class apt(
         ensure  => absent,
         path    => "${apt_conf_d}/99unauth",
         notify  => Class['apt::update'],
-        require => Anchor['apt::begin'],
       }
     }
     undef:   { } # do nothing
@@ -114,7 +109,6 @@ class apt(
       path    => "${apt_conf_d}/proxy",
       content => "Acquire::http::Proxy \"http://${proxy_host}:${proxy_port}\";",
       notify  => Class['apt::update'],
-      require => Anchor['apt::begin'],
     }
   }
 

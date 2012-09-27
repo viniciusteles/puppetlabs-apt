@@ -14,7 +14,6 @@ define apt::conf (
     owner   => root,
     group   => root,
     mode    => '0644',
-    require => Anchor['apt::begin'],
     notify  => Class['apt::update'],
   }
 }

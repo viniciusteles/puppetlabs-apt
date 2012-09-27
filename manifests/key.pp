@@ -52,7 +52,6 @@ define apt::key (
           logoutput => 'on_failure',
           before    => Anchor["apt::key ${upkey} present"],
           notify    => Class['apt::update'],
-          require   => Anchor['apt::begin'],
         }
       }
 
@@ -73,7 +72,6 @@ define apt::key (
         group     => 'root',
         logoutput => 'on_failure',
         notify    => Class['apt::update'],
-        require   => Anchor['apt::begin'],
       }
     }
 

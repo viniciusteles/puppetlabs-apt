@@ -14,6 +14,5 @@ class apt::release (
     mode    => '0644',
     content => "APT::Default-Release \"${release_id}\";"
     notify  => Class['apt::update'],
-    require => Anchor['apt::begin'],
   }
 }

@@ -26,7 +26,6 @@ define apt::ppa(
     creates   => "${sources_list_d}/${sources_list_d_filename}",
     logoutput => 'on_failure',
     require   => [
-      Anchor['apt::begin'],
       File[$sources_list_d],
       Package['python-software-properties'],
     ],
@@ -36,7 +35,6 @@ define apt::ppa(
   file { "${sources_list_d}/${sources_list_d_filename}":
     ensure  => file,
     require => [
-      Anchor['apt::begin'],
       Exec["add-apt-repository-${name}"],
     ],
     notify    => Class['apt::update'],,

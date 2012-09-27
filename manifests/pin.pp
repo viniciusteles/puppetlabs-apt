@@ -34,7 +34,6 @@ define apt::pin(
     group   => root,
     mode    => '0644',
     content => template('apt/pin.pref.erb'),
-    require => Anchor['apt::begin'],
     notify  => Class['apt::update'],
   }
 }
