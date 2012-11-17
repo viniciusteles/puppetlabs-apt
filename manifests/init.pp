@@ -40,7 +40,7 @@ class apt(
 
   Apt::Key <| |> -> Exec["apt_update"]
   Apt::Source <| |> -> Exec["apt_update"]
-  Exec["apt_update"] -> Package <| |>
+  Exec["apt_update"] -> Package <| title != 'python-software-properties' |>
 
   validate_bool($purge_sources_list, $purge_sources_list_d, $purge_preferences_d)
 
