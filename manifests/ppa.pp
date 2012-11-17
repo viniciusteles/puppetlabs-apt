@@ -29,7 +29,7 @@ define apt::ppa(
       File[$sources_list_d],
       Package['python-software-properties'],
     ],
-    notify    => Class['apt::update'],,
+    notify    => Class['apt::update'],
   }
 
   file { "${sources_list_d}/${sources_list_d_filename}":
@@ -37,7 +37,7 @@ define apt::ppa(
     require => [
       Exec["add-apt-repository-${name}"],
     ],
-    notify    => Class['apt::update'],,
+    notify    => Class['apt::update'],
   }
 }
 
